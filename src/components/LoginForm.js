@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserAlt, faLock } from '@fortawesome/free-solid-svg-icons';
+import './LoginForm.css';
 
 
 function LoginForm({Login}) {
     const [details, setDetails] = useState({email: '', password: ''});
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [loginError, setLoginError] = useState('');
     const [loading, setLoading] = useState(false);
-    // const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
 
     const validateEmail = (email) => {
         const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -48,25 +48,36 @@ function LoginForm({Login}) {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("submitting form");
         setLoading(true);
-        const url = "http://dev.rapptrlabs.com/Tests/scripts/user-login.php";
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(details)
-        })
-        .then(res => res.json())
-        .then(data => {
-            setLoading(false);
-            console.log(data);
-            Login(details);
-        })
-        //let data = await res.json();
         
-        //test@rapptrlabs.com
-            //Test123
+        let formdata = new FormData();
+        formdata.append("email", details.email);
+        formdata.append("password", details.password);
+        
+        let requestOptions = {
+          method: 'POST',
+          body: formdata
+        };
+
+        const url = "http://dev.rapptrlabs.com/Tests/scripts/user-login.php";
+        
+        try{
+            const res = await fetch(url, requestOptions)
+            if(res.status === 200){
+                const data = await res.json()
+                Login(data);
+            } else {
+                setLoginError('Incorrect Email/Password')
+            }
+            setLoading(false);
+        } catch(error) {
+            setLoginError('The server could not be reached. Please try again later');
+            console.log('error', error);
+            setLoading(false);
+        }
     }
 
     return (
@@ -100,6 +111,7 @@ function LoginForm({Login}) {
                 <Error>{passwordError}</Error>
             </FormGroup>
             <Button
+                className={loading ? "loading" : null}
                 disabled={(
                             details.email && 
                             details.password &&
@@ -110,11 +122,16 @@ function LoginForm({Login}) {
                         }
                 type="submit" 
                 value="Login" />
+            <Error>{loginError}</Error>
         </Form>
     )
 }
 
 const Form = styled.form`
+    & > small{
+        display: block;
+        text-align:center;
+    }
 `;
 
 const Title = styled.h1`
@@ -124,13 +141,7 @@ const Title = styled.h1`
 const FormGroup = styled.div`
     display: flex;
     flex-direction: column;
-    margin-bottom: 1.5em;
-
-    & .inputError {
-        border: 2px solid red;
-    }
-
-    
+    margin-bottom: 1.5em;    
 `;
 
 const Label = styled.label`
@@ -158,6 +169,8 @@ const Textbox = styled.input`
 const Error = styled.small`
     color: red;
     height: 10px;
+
+
 `;
 
 const Button = styled.input`
@@ -165,6 +178,15 @@ const Button = styled.input`
     padding: 0.5em;
     margin-top: 1.5em;
     font-weight: bold;
+    position: relative;
+
+    &::before {
+        content: 'C';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        font-weight: bold;
+    }
 `;
 
 export default LoginForm;

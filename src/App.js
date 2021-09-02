@@ -5,23 +5,18 @@ import TodoList from './components/TodoList';
 import styled from 'styled-components';
 
 function App() {
-  const [user, setUser] = useState({name:'', email:''});
+  const [user, setUser] = useState({user_username:'', user_email:''});
 
-  const Login = (details) => {
-    setUser({email: details.email, password: details.password});
-  }
-
-  const Logout = () => {
-    setUser({name:'', email: ''});
-  }
+  const Login = (data) => setUser({...data});
+  const Logout = () => setUser({user_username:'', user_email: ''});
 
   return (
     <Container>
       {
-        user.email === '' ?
+        user.user_email === '' ?
         <LoginForm Login={Login}></LoginForm> 
         :
-        <TodoList Logout={Logout}></TodoList>
+        <TodoList user={user} Logout={Logout}></TodoList>
       }
       
     </Container>

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
 
-function TodoList({ Logout }){
+function TodoList({ user, Logout }){
     const [items, setItems] = useState([]);
     const [search, setSearch ] = useState('');
 
@@ -16,11 +16,11 @@ function TodoList({ Logout }){
     },[])
     
     const updateTask = (prevTask, newTask) => {
-        console.log(`edit ${prevTask} => ${newTask}`);
+        //console.log(`edit ${prevTask} => ${newTask}`);
         const index = items.indexOf(prevTask);
         let newArr = [...items]
         newArr[index] = newTask;
-        console.log(newArr);
+        //console.log(newArr);
         localStorage.setItem("todo", JSON.stringify(newArr));
         setItems(newArr);
     }
@@ -40,6 +40,7 @@ function TodoList({ Logout }){
             const newArr = ['', ...items];
             setItems(newArr);
         }
+        console.log(user[0]);
     }
 
     const generateKey = (pre) => {
@@ -49,7 +50,7 @@ function TodoList({ Logout }){
     return (
         <Container>
             <LogoutBtn onClick={Logout}>Logout</LogoutBtn>
-            <Title>My To-Do List</Title>
+            <Title>{`${user.user_username}'s`} To-Do List</Title>
             <List>
                 <ControlGroup>
                     <SearchWrapper>
