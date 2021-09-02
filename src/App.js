@@ -1,11 +1,12 @@
 import './App.css';
 import Login from './components/Login';
+import TodoList from './components/TodoList';
 import styled from 'styled-components';
 
 function App() {
   return (
     <Container>
-      <Login></Login>
+      <TodoList></TodoList>
     </Container>
   );
 }
@@ -16,6 +17,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 `;
 
 export default App;

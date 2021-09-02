@@ -41,16 +41,24 @@ function Login() {
         if(name === "email"){
             setDetails({...details, email: value});
             validateEmail(value);
-            
         } else if(name === "password"){
             setDetails({...details, password: value});
             validatePassword(value);
         }
     }
 
-    const handleSubmit = (e) => {
-        console.log("submitting form");
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("submitting form");
+        const url = "http://dev.rapptrlabs.com/Tests/scripts/user-login.php";
+        let res = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(details)
+        });
+        let data = await res.json();
+        console.log(data);
+        //test@rapptrlabs.com
+            //Test123
     }
 
     return (
@@ -102,6 +110,7 @@ const Form = styled.form`
 
 const Title = styled.h1`
     font-size: 5rem;
+    margin-top: 0;
 `;
 
 const FormGroup = styled.div`
@@ -122,10 +131,12 @@ const Label = styled.label`
 `;
 
 const TextboxWrapper = styled.div`
+    align-items: center;
+    padding-left: 0.75em;
     display: flex;
     border: 1px solid black;
     box-sizing: border-box;
-    padding: 0.5em;
+    
 `;
 
 const Textbox = styled.input`
@@ -133,6 +144,7 @@ const Textbox = styled.input`
     border: none;
     outline:none;
     flex-grow: 2;
+    padding: 0.75em;
 `;
 
 const Error = styled.small`
