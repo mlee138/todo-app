@@ -26,10 +26,6 @@ function TodoList({ user, Logout }){
     }
 
     const deleteTask = (taskName) => {
-        // let tasks = items;
-        // tasks.splice(tasks.indexOf(taskName), 1);
-        // console.log(tasks);
-        console.log(`delete ${taskName}`)
         const newArr = items.filter(item => item !== taskName);
         localStorage.setItem("todo", JSON.stringify(newArr));
         setItems(newArr);
@@ -40,7 +36,6 @@ function TodoList({ user, Logout }){
             const newArr = ['', ...items];
             setItems(newArr);
         }
-        console.log(user[0]);
     }
 
     const generateKey = (pre) => {
@@ -50,7 +45,8 @@ function TodoList({ user, Logout }){
     return (
         <Container>
             <LogoutBtn onClick={Logout}>Logout</LogoutBtn>
-            <Title>{`${user.user_username}'s`} To-Do List</Title>
+
+            <Title><span>{`${user.user_username}'s`}</span> To-Do List</Title>
             <List>
                 <ControlGroup>
                     <SearchWrapper>
@@ -78,6 +74,28 @@ function TodoList({ user, Logout }){
 
 const Container = styled.div`
     min-width: 400px;
+    color: var(--bg-color);
+    margin-bottom: 4rem;
+
+    & button {
+        border: 2px solid transparent;
+        box-sizing: border-box;
+        font-weight: bold;
+        background-color: var(--btn-normal);
+       
+        &:hover {
+            border: 2px solid var(--btn-hover);
+        }
+
+        &:active {
+            background-color: var(--btn-active);
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        margin-top: 50px;
+        margin-bottom: 1rem;
+    }
 `;
 
 const LogoutBtn = styled.button`
@@ -85,19 +103,27 @@ const LogoutBtn = styled.button`
     top: 1rem;
     right: 1rem;
     padding: 0.5rem 1rem;
-    font-weight: bold;
+
+
 `;
 
 const Title = styled.h1`
     font-size: 4rem;
     text-align: center;
+    color: var(--font-color);
+    & span {
+        color: var(--blue-accent);
+    }
+
+    @media screen and (max-width: 500px) {
+        font-size: 2rem;
+    }
 `;
 
 const ControlGroup = styled.div`
     display: flex;
     justify-content: space-between;
-    padding: 1em;
-    border-bottom: 2px solid black;
+    padding-bottom: 1em;
 `;
 
 const SearchWrapper = styled.div`
@@ -106,27 +132,36 @@ const SearchWrapper = styled.div`
     border: 2px solid black;
     border-radius: 20px;
     padding-left: 0.5rem;
+    background-color: white;
+    opacity: 0.85;
 `;
 
 const Search = styled.input`
     padding: 0.5rem;
+    margin-left: 0.5rem;
     flex-grow: 2;
     border: none;
     border-radius: inherit;
     outline:none;
+    background-color: transparent;
+
 `;
 
 const NewButton = styled.button`
     padding: 0.5rem 1rem;
+    background-color: var(--btn-normal);
+    border: 2px solid transparent;
 `;
 
 const List = styled.div`
     display: flex;
     flex-direction: column;
-    border: 2px solid black;
     box-sizing: border-box;
     border-radius: 5px;
-    padding: 0;
+    padding: 1rem;
+    
+    background: linear-gradient(315deg, rgba(9,9,121,1) 26%, rgba(0,212,255,1) 92%);
+
 `;
 
 export default TodoList;

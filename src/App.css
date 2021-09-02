@@ -1,0 +1,9 @@
+:root{
+    --bg-color: #131718;
+    --font-color: #fefefe;
+    --blue-accent: #2fcbfc;
+    --btn-normal: hsl(182, 69%, 66%);
+    --btn-hover: hsl(182, 22%, 79%);
+    --btn-active: hsl(182, 80%, 75%);
+    --green-accent: #2ffcc6;
+}

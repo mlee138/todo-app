@@ -28,7 +28,9 @@ const Container = styled.div`
   padding: 0;
   display: flex;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
+  color: var(--font-color);
+  background-color: var(--bg-color);
 `;
 
 export default App;

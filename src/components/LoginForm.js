@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserAlt, faLock } from '@fortawesome/free-solid-svg-icons';
-import './LoginForm.css';
+import BgSrc from '../images/rapptr_logo.png';
 
 
 function LoginForm({Login}) {
@@ -82,11 +82,11 @@ function LoginForm({Login}) {
 
     return (
         <Form onSubmit={(e) => handleSubmit(e)}>
-            <Title>Rapptr Labs</Title>
+            <Title><span>Rapptr</span> Labs</Title>
             <FormGroup>
                 <Label>Email</Label>
                 <TextboxWrapper className={emailError ? "inputError" : null}>
-                    <FontAwesomeIcon icon={faUserAlt}/>
+                    <Icon icon={faUserAlt}/>
                     <Textbox 
                         name="email"
                         type="email"
@@ -100,7 +100,7 @@ function LoginForm({Login}) {
             <FormGroup>
                 <Label>Password</Label>
                 <TextboxWrapper className={passwordError ? "inputError" : null}>
-                    <FontAwesomeIcon icon={faLock}/>
+                    <Icon icon={faLock}/>
                     <Textbox 
                         name="password"
                         type="password" 
@@ -127,15 +127,44 @@ function LoginForm({Login}) {
     )
 }
 
+const loadingAnimation = keyframes `
+    0% {background-position: 0% 50%}
+    100% {background-position: 100% 50%}
+`;
+
 const Form = styled.form`
+    padding: 1rem;
+    background-image: url(${BgSrc});
+    background-size: contain;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+
     & > small{
         display: block;
         text-align:center;
+    }
+
+    & .inputError {
+        border: 1px solid red;
+    }
+
+    & .loading {
+        background: linear-gradient(90deg, #dde7e9, var(--btn-normal), #dde7e9, var(--btn-normal), #dde7e9, #3ae9b7);
+        background-size: 500% 500%;
+        animation: ${loadingAnimation} 1s linear infinite;
     }
 `;
 
 const Title = styled.h1`
     font-size: 5rem;
+    text-align: center;
+    & span {
+        color: var(--blue-accent);
+    }
+
+    @media screen and (max-width: 500px) {
+        font-size: 4rem;
+    }
 `;
 
 const FormGroup = styled.div`
@@ -154,13 +183,20 @@ const TextboxWrapper = styled.div`
     padding-left: 0.75em;
     display: flex;
     border: 1px solid black;
+    border-radius: 20px;
     box-sizing: border-box;
-    
+    background-color: white;
+    box-shadow: 3px 3px 4px black;
+`;
+
+const Icon = styled(FontAwesomeIcon)`
+    color: var(--bg-color);
 `;
 
 const Textbox = styled.input`
     margin-left: 0.5em;
     border: none;
+    border-radius: inherit;
     outline:none;
     flex-grow: 2;
     padding: 0.75em;
@@ -169,23 +205,27 @@ const Textbox = styled.input`
 const Error = styled.small`
     color: red;
     height: 10px;
-
-
 `;
 
 const Button = styled.input`
     width: 100%;
     padding: 0.5em;
+    border: 2px solid transparent;
     margin-top: 1.5em;
     font-weight: bold;
     position: relative;
+    background-color: var(--btn-normal);
+    box-sizing: border-box;
+    &:hover {
+        border: 2px solid var(--btn-hover);
+    }
 
-    &::before {
-        content: 'C';
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        font-weight: bold;
+    &:active {
+        background-color: var(--btn-active);
+    }
+
+    &:disabled {
+        opacity: 0.5;
     }
 `;
 

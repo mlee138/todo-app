@@ -38,7 +38,7 @@ function TodoItem({ name, updateTask, deleteTask }){
             
             {
                 editMode ?
-                <input 
+                <Save 
                     type="submit" 
                     onClick={(e)=>saveTask(e)} 
                     value="Save"
@@ -57,11 +57,12 @@ const Item = styled.form`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #025e71;
     box-sizing: border-box;
     padding: 1rem;
     width: 100%;
     height: 75px;
+    background-color: var(--font-color);
 
     & .error {
         outline-color: red;
@@ -78,6 +79,19 @@ const Input = styled.input`
 
     &:disabled {
         border: none;
+    }
+`;
+
+const Save = styled.input`
+    padding: 0.5rem 1rem;
+    background-color: var(--btn-active);
+    border-radius: 20px;
+    border: none;
+    box-shadow: 1px 1px 2px #909090;;
+    cursor: pointer;
+
+    &:active {
+        box-shadow: 1px 1px 0px #5a5a5a;
     }
 `;
 
