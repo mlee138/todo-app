@@ -5,13 +5,24 @@ import styled from 'styled-components';
 import TodoItem from './TodoItem';
 
 function TodoList(){
-    const [items, setItems] = useState(["workout", "pay bills"]);
+    const [items, setItems] = useState([]);
     const [search, setSearch ] = useState('');
-    
-    const updateTask = (taskName) => {
-        console.log(`edit ${taskName}`);
-        
 
+    useEffect(()=>{
+        const storageList = localStorage.getItem("todo");
+        if( storageList !== null){
+            setItems(JSON.parse(storageList));
+        }
+    },[])
+    
+    const updateTask = (prevTask, newTask) => {
+        console.log(`edit ${prevTask} => ${newTask}`);
+        const index = items.indexOf(prevTask);
+        let newArr = [...items]
+        newArr[index] = newTask;
+        console.log(newArr);
+        localStorage.setItem("todo", JSON.stringify(newArr));
+        setItems(newArr);
     }
 
     const deleteTask = (taskName) => {
@@ -19,7 +30,16 @@ function TodoList(){
         // tasks.splice(tasks.indexOf(taskName), 1);
         // console.log(tasks);
         console.log(`delete ${taskName}`)
-        setItems(items.filter(item => item !== taskName))
+        const newArr = items.filter(item => item !== taskName);
+        localStorage.setItem("todo", JSON.stringify(newArr));
+        setItems(newArr);
+    }
+
+    const addItem = () => {
+        if(!items.includes('')){
+            const newArr = ['', ...items];
+            setItems(newArr);
+        }
     }
 
     const generateKey = (pre) => {
@@ -28,6 +48,7 @@ function TodoList(){
 
     return (
         <Container>
+            <LogoutBtn>Logout</LogoutBtn>
             <Title>My To-Do List</Title>
             <List>
                 <ControlGroup>
@@ -39,10 +60,10 @@ function TodoList(){
                             onChange={(e)=>setSearch(e.target.value)}
                             value={search}/>
                     </SearchWrapper>
-                    <NewButton >New</NewButton>
+                    <NewButton onClick={addItem}>New</NewButton>
                 </ControlGroup>
                 {
-                    items.filter(item => item.includes(search)).map((task) => 
+                    items.filter(item => item.toLowerCase().includes(search.toLowerCase())).map((task) => 
                     <TodoItem 
                         key={generateKey(task)} 
                         name={task} 
@@ -56,6 +77,14 @@ function TodoList(){
 
 const Container = styled.div`
     min-width: 400px;
+`;
+
+const LogoutBtn = styled.button`
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
 `;
 
 const Title = styled.h1`

@@ -1,60 +1,91 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-function normalDisplay() {
-    
-}
-
-function TodoItem({ name, updateTask, deleteTask , }){
+function TodoItem({ name, updateTask, deleteTask }){
     const [task, setTask] = useState(name);
-    const [editMode, setEditMode ] = useState(name ? false : true);
+    const [taskBackup, setTaskBackup] = useState('');
+    const [editMode, setEditMode ] = useState(name.length!==0 ? false : true);
     const inputRef = useRef(null);
+    const maxLength = 25;
+    const minLength = 1;
+    let correctLength = task.length <= maxLength && task.length >= minLength ;
 
-    function editItem() {
-        setEditMode(1);
+    useEffect(()=>{
         inputRef.current.focus();
-        
+    },[])
+
+    const editItem =()=> {
+        setEditMode(true);
+        setTaskBackup(task);
+        inputRef.current.disabled = false;
+        inputRef.current.focus();
+    }
+
+    const saveTask =(e)=> {
+        e.preventDefault();
+        updateTask(taskBackup, task);
+        setEditMode(false);
     }
 
     return(
         <Item>
+            <Input 
+                onChange={(e)=>setTask(e.target.value)} 
+                ref={inputRef} disabled={editMode ? false : true} 
+                value={task}
+                placeholder="Must be 1-25 characters"
+                className={correctLength ? null : "error"}/>
             
-            <Input ref={inputRef} disabled={editMode ? false : true} value={task}/>
-            <ButtonGroup>
-                <Icon onClick={editItem} icon={faPencilAlt}/>
-                <Icon  onClick={()=>deleteTask(task)} icon={faTrashAlt} />
-            </ButtonGroup>
-
+            {
+                editMode ?
+                <input 
+                    type="submit" 
+                    onClick={(e)=>saveTask(e)} 
+                    value="Save"
+                    disabled={correctLength ? false : true}/> :
+                <div>
+                    <Icon onClick={editItem} icon={faPencilAlt}/>
+                    <Icon  onClick={()=>deleteTask(task)} icon={faTrashAlt} />
+                </div>
+            }
         </Item>
     );
 
 }
 
-const Item = styled.div`
+const Item = styled.form`
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid black;
     box-sizing: border-box;
-    padding: 0.5rem;
+    padding: 1rem;
     width: 100%;
+    height: 75px;
+
+    & .error {
+        outline-color: red;
+    }
 `;
 
 const Input = styled.input`
-    border: none;
+    border: 1px solid grey;
+    border-radius: 5px;
     background: none;
     color: black;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+
+    &:disabled {
+        border: none;
+    }
 `;
 
-
-const ButtonGroup = styled.div`
-
-`;
 
 const Icon = styled(FontAwesomeIcon)`
-    margin: 0.25em; 
+    margin: 0 0.25em; 
     padding: 8px;
     cursor: pointer;
 `;
