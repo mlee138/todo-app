@@ -8,9 +8,7 @@ function TodoItem({ name, updateTask, deleteTask }){
     const [taskBackup, setTaskBackup] = useState('');
     const [editMode, setEditMode ] = useState(name.length!==0 ? false : true);
     const inputRef = useRef(null);
-    const maxLength = 25;
-    const minLength = 1;
-    let correctLength = task.length <= maxLength && task.length >= minLength ;
+    let correctLength = task.length <= 25 && task.length >= 1 ;
 
     useEffect(()=>{
         inputRef.current.focus();

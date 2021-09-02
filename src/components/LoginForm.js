@@ -4,10 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserAlt, faLock } from '@fortawesome/free-solid-svg-icons';
 
 
-function Login() {
+function LoginForm({Login}) {
     const [details, setDetails] = useState({email: '', password: ''});
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [loading, setLoading] = useState(false);
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
 
@@ -47,16 +48,23 @@ function Login() {
         }
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         console.log("submitting form");
+        setLoading(true);
         const url = "http://dev.rapptrlabs.com/Tests/scripts/user-login.php";
-        let res = await fetch(url, {
+        fetch(url, {
             method: 'POST',
             body: JSON.stringify(details)
-        });
-        let data = await res.json();
-        console.log(data);
+        })
+        .then(res => res.json())
+        .then(data => {
+            setLoading(false);
+            console.log(data);
+            Login(details);
+        })
+        //let data = await res.json();
+        
         //test@rapptrlabs.com
             //Test123
     }
@@ -96,7 +104,8 @@ function Login() {
                             details.email && 
                             details.password &&
                             !emailError &&
-                            !passwordError ?
+                            !passwordError &&
+                            !loading ?
                             false : true)
                         }
                 type="submit" 
@@ -110,7 +119,6 @@ const Form = styled.form`
 
 const Title = styled.h1`
     font-size: 5rem;
-    margin-top: 0;
 `;
 
 const FormGroup = styled.div`
@@ -159,4 +167,4 @@ const Button = styled.input`
     font-weight: bold;
 `;
 
-export default Login;
+export default LoginForm;

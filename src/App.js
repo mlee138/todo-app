@@ -1,12 +1,29 @@
+import { useState } from 'react';
 import './App.css';
-import Login from './components/Login';
+import LoginForm from './components/LoginForm';
 import TodoList from './components/TodoList';
 import styled from 'styled-components';
 
 function App() {
+  const [user, setUser] = useState({name:'', email:''});
+
+  const Login = (details) => {
+    setUser({email: details.email, password: details.password});
+  }
+
+  const Logout = () => {
+    setUser({name:'', email: ''});
+  }
+
   return (
     <Container>
-      <TodoList></TodoList>
+      {
+        user.email === '' ?
+        <LoginForm Login={Login}></LoginForm> 
+        :
+        <TodoList Logout={Logout}></TodoList>
+      }
+      
     </Container>
   );
 }

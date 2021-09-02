@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
 
-function TodoList(){
+function TodoList({ Logout }){
     const [items, setItems] = useState([]);
     const [search, setSearch ] = useState('');
 
@@ -48,7 +48,7 @@ function TodoList(){
 
     return (
         <Container>
-            <LogoutBtn>Logout</LogoutBtn>
+            <LogoutBtn onClick={Logout}>Logout</LogoutBtn>
             <Title>My To-Do List</Title>
             <List>
                 <ControlGroup>
